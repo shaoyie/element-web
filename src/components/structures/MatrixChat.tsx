@@ -764,6 +764,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         dis.dispatch(payload.deferred_action);
                     });
                 }
+                // On mobile, auto-hide the left panel so the room view is visible
+                if (UIStore.instance.windowWidth < 768) {
+                    dis.dispatch({ action: "hide_left_panel" });
+                }
                 break;
             }
             case Action.ViewUserDeviceSettings: {
