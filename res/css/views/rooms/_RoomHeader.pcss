@@ -15,6 +15,20 @@ Please see LICENSE files in the repository root for full details.
     transition: all 0.2s ease;
 }
 
+.mx_RoomHeader_menuButton {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .mx_RoomHeader {
+        padding-left: var(--cpd-space-3x);
+    }
+
+    .mx_RoomHeader_menuButton {
+        display: inline-flex;
+    }
+}
+
 .mx_RoomHeader:hover {
     background-color: $header-panel-bg-hover;
 }

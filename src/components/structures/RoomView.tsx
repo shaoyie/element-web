@@ -2534,6 +2534,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                                 ref={this.roomViewBody}
                                 data-layout={this.state.layout}
                             >
+                                {showRightPanel && (
+                                    <div
+                                        className="mx_MobileOverlay mx_MobileOverlay--rhs"
+                                        onClick={() => RightPanelStore.instance.togglePanel(this.state.room.roomId)}
+                                    />
+                                )}
                                 <RoomHeader
                                     room={this.state.room}
                                     additionalButtons={this.state.viewRoomOpts.buttons}

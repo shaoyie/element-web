@@ -17,6 +17,7 @@ import NotificationsIcon from "@vector-im/compound-design-tokens/assets/web/icon
 import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error";
 import PublicIcon from "@vector-im/compound-design-tokens/assets/web/icons/public";
+import SidebarIcon from "@vector-im/compound-design-tokens/assets/web/icons/sidebar";
 import { JoinRule, type Room } from "matrix-js-sdk/src/matrix";
 import { ViewRoomOpts } from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
@@ -51,6 +52,7 @@ import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import RoomContext from "../../../contexts/RoomContext";
 import { MainSplitContentType } from "../../structures/RoomView";
 import defaultDispatcher from "../../../dispatcher/dispatcher.ts";
+import dis from "../../../dispatcher/dispatcher";
 import { RoomSettingsTab } from "../dialogs/RoomSettingsDialog.tsx";
 
 export default function RoomHeader({
@@ -246,6 +248,18 @@ export default function RoomHeader({
     return (
         <>
             <Flex as="header" align="center" gap="var(--cpd-space-3x)" className="mx_RoomHeader light-panel">
+                <Tooltip label={_t("common|rooms")}>
+                    <IconButton
+                        className="mx_RoomHeader_menuButton"
+                        onClick={(evt) => {
+                            evt.stopPropagation();
+                            dis.dispatch({ action: "show_left_panel" });
+                        }}
+                        aria-label={_t("common|rooms")}
+                    >
+                        <SidebarIcon />
+                    </IconButton>
+                </Tooltip>
                 <WithPresenceIndicator room={room} size="8px">
                     {/* We hide this from the tabIndex list as it is a pointer shortcut and superfluous for a11y */}
                     <RoomAvatar

@@ -35,6 +35,20 @@ Please see LICENSE files in the repository root for full details.
     min-height: 0;
 }
 
+.mx_MobileOverlay {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .mx_MobileOverlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 2000;
+    }
+}
+
 /* not the left panel, and not the resize handle, so the roomview and friends */
 .mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_SpacePanel):not(.mx_ResizeHandle):not(.mx_LeftPanel_outerWrapper) {
     background-color: $background;

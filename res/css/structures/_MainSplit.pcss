@@ -13,6 +13,24 @@ Please see LICENSE files in the repository root for full details.
     height: 100%;
 }
 
+@media (max-width: 767px) {
+    .mx_MainSplit > .mx_RightPanel_ResizeWrapper {
+        position: fixed !important;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        width: 85vw !important;
+        max-width: 360px;
+        z-index: 2001;
+        background: var(--cpd-color-bg-canvas-default);
+        box-shadow: -8px 0 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .mx_MainSplit > .mx_RightPanel_ResizeWrapper .mx_ResizeHandle--horizontal {
+        display: none;
+    }
+}
+
 .mx_MainSplit > .mx_RightPanel_ResizeWrapper {
     &:hover .mx_ResizeHandle--horizontal::before {
         position: absolute;

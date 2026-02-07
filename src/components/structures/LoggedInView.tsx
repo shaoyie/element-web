@@ -705,6 +705,8 @@ class LoggedInView extends React.Component<IProps, IState> {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
+        const showLhsOverlay = !this.props.collapseLhs && this.props.page_type === PageTypes.RoomView;
+
         return (
             <MatrixClientContextProvider client={this._matrixClient}>
                 <div
@@ -715,7 +717,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 >
                     <ToastContainer />
                     <div className={bodyClasses}>
-                        <div className="mx_LeftPanel_outerWrapper">
+                        <div className="mx_LeftPanel_outerWrapper" data-drawer-open={this.props.collapseLhs ? undefined : true}>
                             <LeftPanelLiveShareWarning isMinimized={this.props.collapseLhs || false} />
                             <div className="mx_LeftPanel_wrapper">
                                 <BackdropPanel blurMultiplier={0.5} backgroundImage={this.state.backgroundImage} />
@@ -734,6 +736,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 </div>
                             </div>
                         </div>
+                        {showLhsOverlay && (
+                            <div
+                                className="mx_MobileOverlay mx_MobileOverlay--lhs"
+                                onClick={() => dis.dispatch({ action: "hide_left_panel" })}
+                            />
+                        )}
                         <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />
                         <div className="mx_RoomView_wrapper">{pageElement}</div>
                     </div>
