@@ -75,6 +75,35 @@ Please see LICENSE files in the repository root for full details.
     }
 }
 
+@media (max-width: 767px) {
+    .mx_Dialog_wrapper {
+        align-items: stretch;
+        justify-content: stretch;
+    }
+
+    .mx_Dialog_border {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .mx_Dialog {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        padding: var(--cpd-space-6x) var(--cpd-space-6x);
+    }
+
+    .mx_Dialog_cancelButton {
+        top: var(--cpd-space-3x);
+        right: var(--cpd-space-3x);
+    }
+
+    .mx_Dialog_content {
+        margin: 16px 0 24px;
+    }
+}
+
 html {
     /* hack to stop overscroll bounce on OSX and iOS.
        N.B. Breaks things when we have legitimate horizontal overscroll */

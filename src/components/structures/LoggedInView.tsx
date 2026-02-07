@@ -7,18 +7,19 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import React, { ClipboardEvent } from "react";
+import classNames from "classnames";
+import { IconButton, Tooltip } from "@vector-im/compound-web";
+import SidebarIcon from "@vector-im/compound-design-tokens/assets/web/icons/sidebar";
 import {
     ClientEvent,
+    IUsageLimit,
     MatrixClient,
+    MatrixError,
     MatrixEvent,
     RoomStateEvent,
-    MatrixError,
-    IUsageLimit,
     SyncStateData,
-    SyncState,
 } from "matrix-js-sdk/src/matrix";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import classNames from "classnames";
 
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "../../Keyboard";
 import PageTypes from "../../PageTypes";
@@ -705,7 +706,8 @@ class LoggedInView extends React.Component<IProps, IState> {
             return <AudioFeedArrayForLegacyCall call={call} key={call.callId} />;
         });
 
-        const showLhsOverlay = !this.props.collapseLhs && this.props.page_type === PageTypes.RoomView;
+        const showLhsOverlay = !this.props.collapseLhs;
+        const showMobileMenuButton = this.props.collapseLhs && this.props.page_type !== PageTypes.RoomView;
 
         return (
             <MatrixClientContextProvider client={this._matrixClient}>
@@ -736,6 +738,17 @@ class LoggedInView extends React.Component<IProps, IState> {
                                 </div>
                             </div>
                         </div>
+                        {showMobileMenuButton && (
+                            <Tooltip label={_t("common|rooms")}>
+                                <IconButton
+                                    className="mx_MobileMenuButton"
+                                    onClick={() => dis.dispatch({ action: "show_left_panel" })}
+                                    aria-label={_t("common|rooms")}
+                                >
+                                    <SidebarIcon />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                         {showLhsOverlay && (
                             <div
                                 className="mx_MobileOverlay mx_MobileOverlay--lhs"

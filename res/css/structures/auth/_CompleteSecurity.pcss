@@ -41,11 +41,13 @@ Please see LICENSE files in the repository root for full details.
 
 .mx_CompleteSecurity_actionRow {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
+    gap: 12px;
     margin-top: $font-28px;
 
     .mx_AccessibleButton {
-        margin-inline-start: 18px;
+        margin-inline-start: 0;
 
         &.warning {
             color: $alert;
