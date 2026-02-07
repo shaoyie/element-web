@@ -297,4 +297,86 @@ Please see LICENSE files in the repository root for full details.
             }
         }
     }
+
+    /* Mobile responsive styles */
+    @media (max-width: 768px) {
+        --innerWidth: 100%;
+
+        .mx_MainSplit > div:first-child {
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: $font-20px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .mx_SpaceRoomView_description {
+            font-size: $font-14px;
+            max-width: 100% !important;
+        }
+
+        .mx_Field {
+            max-width: 100% !important;
+        }
+
+        .mx_SpaceRoomView_buttons {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin-top: 32px;
+
+            .mx_AccessibleButton_hasKind {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 12px;
+            }
+        }
+
+        .mx_AddExistingToSpace {
+            max-width: 100% !important;
+        }
+
+        .mx_SpaceRoomView_privateScope {
+            > .mx_AccessibleButton {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 16px 20px 16px 60px;
+            }
+        }
+
+        .mx_SpaceRoomView_inviteTeammates {
+            .mx_SpaceRoomView_inviteTeammates_buttons {
+                .mx_AccessibleButton + .mx_AccessibleButton {
+                    margin-left: 0;
+                    margin-top: 16px;
+                    display: block;
+                }
+            }
+        }
+    }
+
+    /* Extra small mobile devices */
+    @media (max-width: 480px) {
+        .mx_MainSplit > div:first-child {
+            padding: 24px 16px;
+        }
+
+        h1 {
+            font-size: $font-18px !important;
+        }
+
+        .mx_SpaceRoomView_description {
+            font-size: $font-13px;
+            margin-bottom: 20px;
+        }
+
+        .mx_Field + .mx_Field {
+            margin-top: 20px !important;
+        }
+
+        .mx_SpaceRoomView_buttons {
+            margin-top: 24px;
+        }
+    }
 }
