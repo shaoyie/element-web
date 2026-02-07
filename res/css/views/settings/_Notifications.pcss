@@ -93,3 +93,104 @@ Please see LICENSE files in the repository root for full details.
 .mx_AccessibleButton.mx_NotificationSound_browse {
     margin-right: 10px;
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .mx_UserNotifSettings_grid {
+        width: 100%;
+        grid-template-columns: 1fr;
+        grid-gap: var(--cpd-space-4x);
+        place-items: stretch;
+
+        .mx_StyledRadioButton {
+            justify-content: flex-start;
+
+            .mx_StyledRadioButton_content {
+                display: inline-block;
+                margin-left: var(--cpd-space-2x);
+            }
+
+            .mx_StyledRadioButton_spacer {
+                display: inline-block;
+            }
+        }
+
+        .mx_SettingsSubsectionHeading {
+            margin-top: var(--cpd-space-4x);
+            margin-bottom: var(--cpd-space-2x);
+        }
+    }
+
+    .mx_UserNotifSettings_gridRowContainer {
+        display: block;
+        border: 1px solid var(--cpd-color-border-interactive-secondary);
+        border-radius: 8px;
+        padding: var(--cpd-space-3x);
+        margin-bottom: var(--cpd-space-3x);
+    }
+
+    .mx_UserNotifSettings_gridRow {
+        display: flex;
+        flex-direction: column;
+        gap: var(--cpd-space-2x);
+    }
+
+    .mx_UserNotifSettings_gridRowLabel {
+        float: none;
+        font-weight: var(--cpd-font-weight-semibold);
+        margin-bottom: var(--cpd-space-2x);
+    }
+
+    .mx_UserNotifSettings_gridColumnLabel {
+        display: none;
+    }
+
+    .mx_UserNotifSettings_gridRowError {
+        padding-right: 0;
+        margin-top: var(--cpd-space-2x);
+    }
+
+    .mx_UserNotifSettings_floatingSection {
+        margin-top: var(--cpd-space-6x);
+
+        & > div:first-child {
+            font-size: 16px;
+        }
+
+        > table {
+            width: 100%;
+            display: block;
+
+            tr {
+                display: flex;
+                flex-direction: column;
+                gap: var(--cpd-space-2x);
+                margin-bottom: var(--cpd-space-3x);
+
+                > td {
+                    display: block;
+                    padding-right: 0 !important;
+                }
+            }
+        }
+    }
+
+    .mx_AccessibleButton.mx_NotificationSound_browse {
+        margin-right: 0;
+        margin-bottom: var(--cpd-space-2x);
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .mx_UserNotifSettings_gridRowContainer {
+        padding: var(--cpd-space-2x);
+    }
+
+    .mx_UserNotifSettings_floatingSection {
+        & > div:first-child {
+            font-size: 15px;
+        }
+    }
+}
+

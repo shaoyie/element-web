@@ -84,3 +84,46 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .mx_LayoutSwitcher_LayoutSelector {
+        gap: var(--cpd-space-3x) !important;
+
+        .mxLayoutSwitcher_LayoutSelector_LayoutRadio {
+            .mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline {
+                gap: var(--cpd-space-2x);
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline,
+            .mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview {
+                margin: var(--cpd-space-2x);
+            }
+
+            .mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview {
+                width: 100%;
+                overflow-x: auto;
+
+                .mx_EventTile {
+                    &[data-layout="bubble"] {
+                        margin-right: var(--cpd-space-2x);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .mx_LayoutSwitcher_LayoutSelector {
+        .mxLayoutSwitcher_LayoutSelector_LayoutRadio {
+            .mxLayoutSwitcher_LayoutSelector_LayoutRadio_inline,
+            .mxLayoutSwitcher_LayoutSelector_LayoutRadio_EventTilePreview {
+                margin: var(--cpd-space-1x);
+            }
+        }
+    }
+}
+

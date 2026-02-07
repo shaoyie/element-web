@@ -39,3 +39,32 @@ Please see LICENSE files in the repository root for full details.
     flex-direction: column;
     gap: $spacing-8;
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .mx_SettingsFieldset_legend {
+        font-size: 16px;
+        margin-top: var(--cpd-space-3x);
+        margin-bottom: var(--cpd-space-2x);
+    }
+
+    .mx_SettingsFieldset_description {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .mx_SettingsFieldset_content {
+        gap: var(--cpd-space-3x);
+    }
+}
+
+@media (max-width: 480px) {
+    .mx_SettingsFieldset_legend {
+        font-size: 15px;
+    }
+
+    .mx_SettingsFieldset_description {
+        font-size: 13px;
+    }
+}
+

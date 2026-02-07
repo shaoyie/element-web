@@ -189,3 +189,81 @@ Please see LICENSE files in the repository root for full details.
         }
     }
 }
+
+/* Mobile-specific styles for Settings dialogs */
+@media (max-width: 768px) {
+    .mx_TabbedView_tabsOnLeft {
+        /* Switch to horizontal layout on mobile */
+        flex-direction: column;
+        position: relative;
+
+        .mx_TabbedView_tabLabels {
+            width: 100% !important;
+            max-width: 100% !important;
+            position: sticky !important;
+            top: 0;
+            z-index: 10;
+            display: flex !important;
+            flex-direction: row;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: var(--cpd-space-2x) var(--cpd-space-2x) 0 var(--cpd-space-2x);
+            background: var(--cpd-color-bg-canvas-default);
+            border-bottom: 1px solid var(--cpd-color-border-interactive-secondary);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            
+            &::-webkit-scrollbar {
+                display: none; /* Chrome, Safari */
+            }
+        }
+
+        .mx_TabbedView_tabLabel {
+            flex-shrink: 0;
+            padding: var(--cpd-space-2x) var(--cpd-space-3x) !important;
+            min-width: auto !important;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: -1px; /* Overlap with border */
+            justify-content: center !important;
+        }
+
+        .mx_TabbedView_tabLabel_text {
+            display: inline-block !important;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .mx_TabbedView_tabLabel_active {
+            background-color: var(--cpd-color-bg-canvas-default) !important;
+            border-bottom: 2px solid var(--cpd-color-border-interactive-primary);
+        }
+
+        /* Hide icons on mobile to save space */
+        .mx_TabbedView_maskedIcon,
+        svg {
+            display: none !important;
+        }
+
+        .mx_TabbedView_tabPanel {
+            margin-left: 0 !important;
+            width: 100% !important;
+            padding: 0 !important;
+        }
+    }
+}
+
+/* Extra small mobile devices - even more compact */
+@media (max-width: 480px) {
+    .mx_TabbedView_tabsOnLeft {
+        .mx_TabbedView_tabLabel {
+            padding: var(--cpd-space-1x) var(--cpd-space-2x) !important;
+            font-size: 13px;
+        }
+
+        .mx_TabbedView_tabLabel_text {
+            font-size: 13px;
+        }
+    }
+}
+

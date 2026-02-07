@@ -38,3 +38,38 @@ Please see LICENSE files in the repository root for full details.
         mask-image: url("@vector-im/compound-design-tokens/icons/warning.svg");
     }
 }
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .mx_SecurityUserSettingsTab_bulkOptions {
+        flex-direction: column;
+        row-gap: var(--cpd-space-3x);
+        column-gap: 0;
+
+        .mx_AccessibleButton {
+            width: 100%;
+        }
+    }
+
+    .mx_SecurityUserSettingsTab_ignoredUser {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--cpd-space-2x);
+
+        .mx_AccessibleButton {
+            margin-right: 0;
+        }
+    }
+
+    .mx_SecurityUserSettingsTab_warning {
+        padding-left: 32px;
+        font-size: 14px;
+
+        &::before {
+            width: 20px;
+            height: 20px;
+            mask-size: 20px;
+        }
+    }
+}
+
