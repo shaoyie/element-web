@@ -7,11 +7,25 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_SpaceCreateMenu_wrapper {
+    @media (max-width: 767px) {
+        left: 0 !important;
+        top: 0 !important;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     /* background blur everything except SpacePanel */
     .mx_ContextualMenu_background {
         background-color: $dialog-backdrop-color;
         opacity: 0.6;
         left: 68px;
+
+        @media (max-width: 767px) {
+            left: 0;
+        }
     }
 
     .mx_ContextualMenu {
@@ -20,6 +34,13 @@ Please see LICENSE files in the repository root for full details.
         box-sizing: border-box;
         background-color: $background;
         position: relative;
+
+        @media (max-width: 767px) {
+            width: calc(100vw - 32px);
+            max-width: calc(100vw - 32px);
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
 
         > div {
             > h2 {
