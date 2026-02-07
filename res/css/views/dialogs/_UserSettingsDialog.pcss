@@ -21,3 +21,67 @@ Please see LICENSE files in the repository root for full details.
         font: var(--cpd-font-heading-md-semibold);
     }
 }
+
+.mx_UserSettingsDialog_navToggle {
+    display: none;
+}
+
+.mx_UserSettingsDialog_navOverlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mx_UserSettingsDialog.mx_Dialog_fixedWidth {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: var(--cpd-space-4x) var(--cpd-space-3x) !important;
+        box-sizing: border-box;
+    }
+
+    .mx_UserSettingsDialog {
+        .mx_SettingsDialog_content {
+            position: relative;
+            min-height: 70vh;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .mx_UserSettingsDialog_navToggle {
+            display: inline-flex;
+            position: absolute;
+            top: var(--cpd-space-3x);
+            left: var(--cpd-space-3x);
+            z-index: 21;
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
+            background: var(--cpd-color-bg-canvas-default);
+            box-shadow: var(--cpd-elevation-02);
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        &.mx_UserSettingsDialog--mobileNavOpen {
+            .mx_UserSettingsDialog_navToggle {
+                visibility: hidden;
+            }
+
+            .mx_UserSettingsDialog_navOverlay {
+                display: block;
+            }
+        }
+
+        .mx_UserSettingsDialog_navOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: 19;
+        }
+    }
+}

@@ -8,7 +8,8 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import { Toast } from "@vector-im/compound-web";
-import React, { useState } from "react";
+import classNames from "classnames";
+import React, { useEffect, useState } from "react";
 import UserProfileIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-profile";
 import DevicesIcon from "@vector-im/compound-design-tokens/assets/web/icons/devices";
 import VisibilityOnIcon from "@vector-im/compound-design-tokens/assets/web/icons/visibility-on";
@@ -44,6 +45,8 @@ import { NonEmptyArray } from "../../../@types/common";
 import { SDKContext, SdkContextClass } from "../../../contexts/SDKContext";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { ToastContext, useActiveToast } from "../../../contexts/ToastContext";
+import AccessibleButton from "../elements/AccessibleButton";
+import { useWindowWidth } from "../../../hooks/useWindowWidth";
 
 interface IProps {
     initialTabId?: UserTab;
@@ -89,6 +92,15 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
     const mjolnirEnabled = useSettingValue<boolean>("feature_mjolnir");
     // store this prop in state as changing tabs back and forth should clear it
     const [showMsc4108QrCode, setShowMsc4108QrCode] = useState(props.showMsc4108QrCode);
+    const windowWidth = useWindowWidth();
+    const isMobile = windowWidth <= 768;
+    const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+    useEffect(() => {
+        if (!isMobile && isMobileNavOpen) {
+            setIsMobileNavOpen(false);
+        }
+    }, [isMobile, isMobileNavOpen]);
 
     const getTabs = (): NonEmptyArray<Tab<UserTab>> => {
         const tabs: Tab<UserTab>[] = [];
@@ -213,9 +225,16 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         _setActiveTabId(tabId);
         // Clear this so switching away from the tab and back to it will not show the QR code again
         setShowMsc4108QrCode(false);
+        if (isMobile) {
+            setIsMobileNavOpen(false);
+        }
     };
 
     const [activeToast, toastRack] = useActiveToast();
+
+    const dialogClassName = classNames("mx_UserSettingsDialog", {
+        "mx_UserSettingsDialog--mobileNavOpen": isMobile && isMobileNavOpen,
+    });
 
     return (
         // XXX: SDKContext is provided within the LoggedInView subtree.
@@ -224,13 +243,22 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
         <SDKContext.Provider value={props.sdkContext}>
             <ToastContext.Provider value={toastRack}>
                 <BaseDialog
-                    className="mx_UserSettingsDialog"
+                    className={dialogClassName}
                     hasCancel={true}
                     onFinished={props.onFinished}
                     title={titleForTabID(activeTabId)}
                     titleClass="mx_UserSettingsDialog_title"
                 >
                     <div className="mx_SettingsDialog_content">
+                        {isMobile && (
+                            <AccessibleButton
+                                className="mx_UserSettingsDialog_navToggle"
+                                onClick={() => setIsMobileNavOpen(true)}
+                                aria-label={_t("action|menu")}
+                            >
+                                <SidebarIcon />
+                            </AccessibleButton>
+                        )}
                         <TabbedView
                             tabs={getTabs()}
                             activeTabId={activeTabId}
@@ -238,6 +266,13 @@ export default function UserSettingsDialog(props: IProps): JSX.Element {
                             onChange={setActiveTabId}
                             responsive={true}
                         />
+                        {isMobile && isMobileNavOpen && (
+                            <div
+                                className="mx_UserSettingsDialog_navOverlay"
+                                onClick={() => setIsMobileNavOpen(false)}
+                                role="presentation"
+                            />
+                        )}
                     </div>
                     <div className="mx_SettingsDialog_toastContainer">
                         {activeToast && <Toast>{activeToast}</Toast>}
