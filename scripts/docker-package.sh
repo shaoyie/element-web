@@ -3,7 +3,7 @@
 set -ex
 
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-DIST_VERSION=$(git describe --abbrev=0 --tags)
+DIST_VERSION=$(git describe --abbrev=0 --tags 2>/dev/null || true)
 
 DIR=$(dirname "$0")
 
@@ -13,6 +13,10 @@ DIR=$(dirname "$0")
 if [[ $BRANCH != HEAD && ! $BRANCH =~ heads/v.+ ]]
 then
     DIST_VERSION=$("$DIR"/get-version-from-git.sh)
+fi
+
+if [ -z "$DIST_VERSION" ]; then
+    DIST_VERSION=$BRANCH
 fi
 
 DIST_VERSION=$("$DIR"/normalize-version.sh "$DIST_VERSION")
