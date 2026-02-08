@@ -46,7 +46,11 @@ export default class WebPlatform extends BasePlatform {
         }
 
         // sw.js is exported by webpack, sourced from `/src/serviceworker/index.ts`
-        const registration = await navigator.serviceWorker.register("sw.js");
+        // Append the Element build/version so CDN caches and browsers always fetch the
+        // updated worker bundle after each deployment.
+        const swVersion = encodeURIComponent(WebPlatform.VERSION ?? "dev");
+        const swUrl = `sw.js?v=${swVersion}`;
+        const registration = await navigator.serviceWorker.register(swUrl);
         if (!registration) {
             // Registration didn't work for some reason - assume failed and ignore.
             // This typically happens in Jest.

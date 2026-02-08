@@ -237,7 +237,7 @@ Finally, build and start Element itself:
 ```bash
 yarn link matrix-js-sdk
 yarn install
-yarn start
+VERSION=v1.11.86 yarn start         # The version is for sw.js refresh
 ```
 
 Wait a few seconds for the initial build to finish; you should see something like:
