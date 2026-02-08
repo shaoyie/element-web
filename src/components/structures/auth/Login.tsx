@@ -27,6 +27,7 @@ import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from "../../views/elements/ServerPicker";
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
+import LanguageSelector from "../../views/auth/LanguageSelector";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 import { filterBoolean } from "../../../utils/arrays";
@@ -555,6 +556,9 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                         disabled={this.isBusy()}
                     />
                     {this.renderLoginComponentForFlows()}
+                    <div className="mx_Login_languageSelectorInline">
+                        <LanguageSelector disabled={this.props.isSyncing || this.state.busyLoggingIn} />
+                    </div>
                     {footer}
                 </AuthBody>
             </AuthPage>
