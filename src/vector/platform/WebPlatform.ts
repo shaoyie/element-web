@@ -63,11 +63,13 @@ export default class WebPlatform extends BasePlatform {
                 const userId = localStorage.getItem("mx_user_id");
                 const deviceId = localStorage.getItem("mx_device_id");
                 const homeserver = MatrixClientPeg.get()?.getHomeserverUrl();
+                const accessToken = MatrixClientPeg.get()?.getAccessToken();
                 event.source!.postMessage({
                     responseKey: event.data["responseKey"],
                     userId,
                     deviceId,
                     homeserver,
+                    accessToken,
                 });
             }
         } catch (e) {

@@ -124,11 +124,16 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
 
     // We need to extract a user ID and device ID from localstorage, which means calling WebPlatform for the
     // read operation. Service workers can't access localstorage.
-    const { userId, deviceId, homeserver } = await askClientForUserIdParams(client);
+    const { userId, deviceId, homeserver, accessToken: clientAccessToken } = await askClientForUserIdParams(client);
 
     // ... and this is why we need the user ID and device ID: they're index keys for the pickle key table.
     const pickleKeyData = await idbLoad("pickleKey", [userId, deviceId]);
     if (pickleKeyData && (!pickleKeyData.encrypted || !pickleKeyData.iv || !pickleKeyData.cryptoKey)) {
+        // Pickle key data is invalid; fall back to the access token provided by the client via postMessage.
+        if (clientAccessToken) {
+            console.warn("SW: Invalid pickle key, using access token from client postMessage.");
+            return { accessToken: clientAccessToken, homeserver };
+        }
         throw new Error("SW: Invalid pickle key loaded - ignoring");
     }
 
@@ -138,6 +143,13 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
         const accessToken = await tryDecryptToken(pickleKey, encryptedAccessToken, ACCESS_TOKEN_IV);
         return { accessToken, homeserver };
     } catch (e) {
+        // Decryption failed (common on mobile browsers where CryptoKey objects don't
+        // serialize properly across the SW boundary). Fall back to the access token
+        // provided directly by the client via postMessage.
+        if (clientAccessToken) {
+            console.warn("SW: Failed to decrypt access token, using token from client postMessage.", e);
+            return { accessToken: clientAccessToken, homeserver };
+        }
         throw new Error("SW: Error decrypting access token.", { cause: e });
     }
 }
@@ -146,7 +158,7 @@ async function getAuthData(client: unknown): Promise<{ accessToken: string; home
 // unknown for now and force-cast it to something close enough inside the function.
 async function askClientForUserIdParams(
     client: unknown,
-): Promise<{ userId: string; deviceId: string; homeserver: string }> {
+): Promise<{ userId: string; deviceId: string; homeserver: string; accessToken?: string }> {
     return new Promise((resolve, reject) => {
         // Dev note: this uses postMessage, which is a highly insecure channel. postMessage is typically visible to other
         // tabs, windows, browser extensions, etc, making it far from ideal for sharing sensitive information. This is
