@@ -29,6 +29,7 @@ import { Key } from "../../../Keyboard";
 import { clamp } from "../../../utils/numbers";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { Ref } from "../../../accessibility/roving/types";
+import { isProbablyCoarsePointerDevice } from "../../../utils/touch";
 
 export const CATEGORY_HEADER_HEIGHT = 20;
 export const EMOJI_HEIGHT = 35;
@@ -57,8 +58,10 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private readonly recentlyUsed: IEmoji[];
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
     private readonly categories: ICategory[];
+    private readonly isTouch = isProbablyCoarsePointerDevice();
 
     private scrollRef = React.createRef<AutoHideScrollbar<"div">>();
+    private previewClearTimer?: ReturnType<typeof setTimeout>;
 
     public constructor(props: IProps) {
         super(props);
@@ -141,6 +144,12 @@ class EmojiPicker extends React.Component<IProps, IState> {
                 ref: React.createRef(),
             },
         ];
+    }
+
+    public componentWillUnmount(): void {
+        if (this.previewClearTimer) {
+            clearTimeout(this.previewClearTimer);
+        }
     }
 
     private onScroll = (): void => {
@@ -333,9 +342,21 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private onClickEmoji = (ev: ButtonEvent, emoji: IEmoji): void => {
-        if (this.props.onChoose(emoji.unicode) !== false) {
+        const didInsert = this.props.onChoose(emoji.unicode) !== false;
+        if (didInsert) {
             recent.add(emoji.unicode);
         }
+
+        // On touch devices, clear preview after a short delay so users can see the emoji info briefly
+        if (this.isTouch) {
+            if (this.previewClearTimer) {
+                clearTimeout(this.previewClearTimer);
+            }
+            this.previewClearTimer = setTimeout(() => {
+                this.setState({ previewEmoji: undefined });
+            }, 1000);
+        }
+
         if ((ev as React.KeyboardEvent).key === Key.ENTER) {
             this.props.onFinished();
         }

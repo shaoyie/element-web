@@ -19,6 +19,7 @@ import { checkInputableElement, RovingTabIndexProvider } from "../../accessibili
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import Modal, { ModalManagerEvent } from "../../Modal";
+import { isProbablyCoarsePointerDevice } from "../../utils/touch";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -74,6 +75,10 @@ export interface MenuProps extends IPosition {
 export interface IProps extends MenuProps {
     // If true, insert an invisible screen-sized element behind the menu that when clicked will close it.
     hasBackground?: boolean;
+    // When true, a background click on touch devices will be replayed onto the element beneath the backdrop.
+    forwardBackgroundClicks?: boolean;
+    // Optional predicate to decide whether a replayed background click should proceed for a given target.
+    shouldForwardBackgroundClick?: (target: Element | null) => boolean;
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
     wrapperClassName?: string;
@@ -184,9 +189,35 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
 
     // Prevent clicks on the background from going through to the component which opened the menu.
     private onFinished = (ev: React.MouseEvent): void => {
+        const { forwardBackgroundClicks, shouldForwardBackgroundClick } = this.props;
+        const shouldAttemptForwarding = !!forwardBackgroundClicks && isProbablyCoarsePointerDevice();
+        const clientX = ev.clientX;
+        const clientY = ev.clientY;
+
         ev.stopPropagation();
         ev.preventDefault();
         this.props.onFinished?.();
+
+        if (shouldAttemptForwarding) {
+            window.requestAnimationFrame(() => {
+                const target = document.elementFromPoint(clientX, clientY);
+                if (shouldForwardBackgroundClick && !shouldForwardBackgroundClick(target)) {
+                    return;
+                }
+
+                if (target) {
+                    target.dispatchEvent(
+                        new MouseEvent("click", {
+                            bubbles: true,
+                            cancelable: true,
+                            clientX,
+                            clientY,
+                            view: window,
+                        }),
+                    );
+                }
+            });
+        }
     };
 
     private onClick = (ev: React.MouseEvent): void => {
@@ -259,6 +290,8 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
             chevronFace: propsChevronFace,
             chevronOffset: propsChevronOffset,
             mountAsChild,
+            forwardBackgroundClicks: _forwardBackgroundClicks, // eslint-disable-line @typescript-eslint/no-unused-vars
+            shouldForwardBackgroundClick: _shouldForwardBackgroundClick, // eslint-disable-line @typescript-eslint/no-unused-vars
             ...props
         } = this.props;
 
@@ -411,6 +444,8 @@ export default class ContextMenu extends React.PureComponent<React.PropsWithChil
         const {
             hasBackground: _hasBackground, // eslint-disable-line @typescript-eslint/no-unused-vars
             onFinished: _onFinished, // eslint-disable-line @typescript-eslint/no-unused-vars
+            forwardBackgroundClicks: __forwardBackgroundClicks, // eslint-disable-line @typescript-eslint/no-unused-vars
+            shouldForwardBackgroundClick: __shouldForwardBackgroundClick, // eslint-disable-line @typescript-eslint/no-unused-vars
             ...divProps
         } = props;
 

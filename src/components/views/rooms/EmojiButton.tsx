@@ -34,7 +34,18 @@ export function EmojiButton({ addEmoji, menuPosition, className }: IEmojiButtonP
         };
 
         contextMenu = (
-            <ContextMenu {...position} onFinished={onFinished} managed={false}>
+            <ContextMenu
+                {...position}
+                onFinished={onFinished}
+                managed={false}
+                forwardBackgroundClicks={true}
+                shouldForwardBackgroundClick={(target) => {
+                    if (!button.current) {
+                        return true;
+                    }
+                    return !button.current.contains(target);
+                }}
+            >
                 <EmojiPicker onChoose={addEmoji} onFinished={onFinished} />
             </ContextMenu>
         );
