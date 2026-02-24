@@ -12,6 +12,7 @@ import { Tooltip } from "@vector-im/compound-web";
 
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { isProbablyCoarsePointerDevice } from "../../../utils/touch";
 
 export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
 
@@ -209,7 +210,9 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
     // React.createElement expects InputHTMLAttributes
     const button = React.createElement(element, newProps, children);
 
-    if (title) {
+    const tooltipEnabled = Boolean(title) && !disableTooltip && !isProbablyCoarsePointerDevice();
+
+    if (tooltipEnabled) {
         return (
             <Tooltip
                 description={title}
@@ -217,7 +220,6 @@ const AccessibleButton = forwardRef(function <T extends keyof JSX.IntrinsicEleme
                 isTriggerInteractive={true}
                 placement={placement}
                 onOpenChange={onTooltipOpenChange}
-                disabled={disableTooltip}
             >
                 {button}
             </Tooltip>

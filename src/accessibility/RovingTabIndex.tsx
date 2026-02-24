@@ -23,6 +23,9 @@ import React, {
 import { getKeyBindingsManager } from "../KeyBindingsManager";
 import { KeyBindingAction } from "./KeyboardShortcuts";
 import { FocusHandler, Ref } from "./roving/types";
+import { isProbablyCoarsePointerDevice } from "../utils/touch";
+
+const rovingTabIndexDisabled = isProbablyCoarsePointerDevice();
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique
@@ -385,7 +388,7 @@ export const useRovingTabIndex = <T extends HTMLElement>(
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const isActive = context.state.activeRef === ref;
+  const isActive = rovingTabIndexDisabled || context.state.activeRef === ref;
   return [onFocus, isActive, ref];
 };
 

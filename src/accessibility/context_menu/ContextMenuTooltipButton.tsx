@@ -11,6 +11,7 @@ Please see LICENSE files in the repository root for full details.
 import React, { ComponentProps, forwardRef, Ref } from "react";
 
 import AccessibleButton from "../../components/views/elements/AccessibleButton";
+import { isProbablyCoarsePointerDevice } from "../../utils/touch";
 
 type Props<T extends keyof JSX.IntrinsicElements> = ComponentProps<typeof AccessibleButton<T>> & {
     // whether the context menu is currently open
@@ -22,6 +23,7 @@ export const ContextMenuTooltipButton = forwardRef(function <T extends keyof JSX
     { isExpanded, children, onClick, onContextMenu, element, ...props }: Props<T>,
     ref: Ref<HTMLElement>,
 ) {
+    const disableTooltip = isProbablyCoarsePointerDevice() || isExpanded;
     return (
         <AccessibleButton
             {...props}
@@ -30,7 +32,7 @@ export const ContextMenuTooltipButton = forwardRef(function <T extends keyof JSX
             onContextMenu={onContextMenu ?? onClick ?? undefined}
             aria-haspopup={true}
             aria-expanded={isExpanded}
-            disableTooltip={isExpanded}
+            disableTooltip={disableTooltip}
             ref={ref}
         >
             {children}

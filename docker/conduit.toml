@@ -6,7 +6,7 @@ allow_registration = true
 allow_federation = true
 address = "0.0.0.0"
 port = 6167
-max_request_size = 31457280
+max_request_size = 52428800
 
 
 [search]
