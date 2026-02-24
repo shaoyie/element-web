@@ -682,7 +682,10 @@ export default class ScrollPanel extends React.Component<IProps> {
     private async restoreSavedScrollState(): Promise<void> {
         const scrollState = this.scrollState;
 
-        if (scrollState.stuckAtBottom) {
+        // Check if keyboard is open - if so, don't scroll to bottom
+        const isKeyboardOpen = document.body.classList.contains('mx_KeyboardOpen');
+        
+        if (scrollState.stuckAtBottom && !isKeyboardOpen) {
             const sn = this.getScrollNode();
             if (sn.scrollTop !== sn.scrollHeight) {
                 sn.scrollTop = sn.scrollHeight;

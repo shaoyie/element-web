@@ -98,6 +98,7 @@ import { makeRoomPermalink } from "../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { initSentry } from "../../sentry";
+import { initMobileViewport, cleanupMobileViewport } from "../../utils/mobileViewport";
 import LegacyCallHandler from "../../LegacyCallHandler";
 import { showSpaceInvite } from "../../utils/space";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
@@ -468,6 +469,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         initSentry(SdkConfig.get("sentry"));
 
+        // Initialize mobile viewport handling
+        initMobileViewport();
+
         if (!checkSessionLockFree()) {
             // another instance holds the lock; confirm its theft before proceeding
             setTimeout(() => this.setState({ view: Views.CONFIRM_LOCK_THEFT }), 0);
@@ -490,6 +494,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.focusNext = undefined;
         } else if (this.focusNext === "threadsPanel") {
             dis.fire(Action.FocusThreadsPanel);
+            this.focusNext = undefined;
         }
     }
 
@@ -497,10 +502,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         this.themeWatcher?.stop();
-        this.fontWatcher?.stop();
         UIStore.destroy();
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
         window.removeEventListener("resize", this.onWindowResized);
+
+        // Cleanup mobile viewport handling
+        cleanupMobileViewport();
 
         this.stores.accountPasswordStore.clearPassword();
         this.voiceBroadcastResumer?.destroy();
@@ -1927,6 +1934,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.prevWindowWidth = width;
         this.state.resizeNotifier.notifyWindowResized();
     };
+
 
     private dispatchTimelineResize(): void {
         dis.dispatch({ action: "timeline_resize" });

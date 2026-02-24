@@ -11,6 +11,15 @@ Please see LICENSE files in the repository root for full details.
     height: 100%;
 }
 
+/* When the software keyboard is open on mobile, clamp the app to the visible
+   viewport height so the message composer stays above the keyboard.
+   --viewport-height is set dynamically by mobileViewport.ts */
+body.mx_KeyboardOpen #matrixchat {
+    height: var(--viewport-height) !important;
+    margin-top: var(--viewport-offset-top, 0px);
+    overflow: hidden;
+}
+
 .mx_MatrixChat_wrapper {
     display: flex;
 
