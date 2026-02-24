@@ -14,6 +14,8 @@ const KEYBOARD_OPEN_CLASS = 'mx_KeyboardOpen';
 // Threshold: visual viewport height reduction that indicates keyboard is open
 const KEYBOARD_HEIGHT_THRESHOLD = 150;
 
+let applyScheduled = false;
+
 function applyViewportHeight(): void {
     const vv = (window as any).visualViewport;
     if (!vv) return;
@@ -34,6 +36,16 @@ function applyViewportHeight(): void {
         document.documentElement.style.removeProperty('--viewport-offset-top');
         document.body.classList.remove(KEYBOARD_OPEN_CLASS);
     }
+
+    // Schedule a follow-up check: Chrome sometimes fires resize before
+    // visualViewport.height has fully updated, so re-evaluate shortly after.
+    if (!applyScheduled) {
+        applyScheduled = true;
+        setTimeout(() => {
+            applyScheduled = false;
+            applyViewportHeight();
+        }, 300);
+    }
 }
 
 let orientationChangeHandler: (() => void) | null = null;
@@ -45,10 +57,10 @@ export function initMobileViewport(): void {
     if (vv) {
         vv.addEventListener('resize', applyViewportHeight);
         vv.addEventListener('scroll', applyViewportHeight);
-    } else {
-        // Fallback for browsers without visualViewport
-        window.addEventListener('resize', applyViewportHeight);
     }
+    // Always also listen to window resize as a fallback - Chrome sometimes
+    // doesn't fire visualViewport resize reliably when keyboard dismisses
+    window.addEventListener('resize', applyViewportHeight);
 
     orientationChangeHandler = () => {
         setTimeout(applyViewportHeight, 300);
@@ -64,9 +76,8 @@ export function cleanupMobileViewport(): void {
     if (vv) {
         vv.removeEventListener('resize', applyViewportHeight);
         vv.removeEventListener('scroll', applyViewportHeight);
-    } else {
-        window.removeEventListener('resize', applyViewportHeight);
     }
+    window.removeEventListener('resize', applyViewportHeight);
 
     if (orientationChangeHandler) {
         window.removeEventListener('orientationchange', orientationChangeHandler);
@@ -76,4 +87,5 @@ export function cleanupMobileViewport(): void {
     document.documentElement.style.removeProperty('--viewport-height');
     document.documentElement.style.removeProperty('--viewport-offset-top');
     document.body.classList.remove(KEYBOARD_OPEN_CLASS);
+    applyScheduled = false;
 }
