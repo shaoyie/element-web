@@ -1,0 +1,30 @@
+services:
+  # Conduit Matrix 服务器
+  conduit:
+    image: matrixconduit/matrix-conduit:v0.10.11
+    ports:
+      - "6167:6167"  # Matrix 联邦端口
+      - "8448:6167"  # Client-Server API
+    volumes:
+      - ./conduit_data:/var/lib/matrix-conduit
+      - ./conduit.toml:/etc/conduit.toml
+    environment:
+      - CONDUIT_SERVER_NAME=chat.shaoyie.com
+      - CONDUIT_DATABASE_PATH=/var/lib/matrix-conduit/conduit.db
+      - CONDUIT_ALLOW_REGISTRATION=true
+      - CONDUIT_ALLOW_FEDERATION=true
+      - CONDUIT_CONFIG=/etc/conduit.toml
+
+  # Element Web 客户端
+  element-web:
+    # image: vectorim/element-web:latest
+    # image: vectorim/element-web:v1.11.91
+    # image: vectorim/element-web:v1.11.96
+    image: element-web:v1.11.86.2
+    ports:
+      - "8080:80"  # 或 443 如果配置了 SSL
+    environment:
+      - DEFAULT_SERVER_NAME=chat.shaoyie.com
+      - VERSION=v1.11.86
+    volumes:
+      - ./element-config.json:/app/config.json

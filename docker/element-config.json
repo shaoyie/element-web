@@ -1,0 +1,30 @@
+{
+  "default_server_config": {
+    "m.homeserver": {
+      "base_url": "https://chat.shaoyie.com",
+      "server_name": "chat.shaoyie.com"
+    }
+  },
+  "brand": "Sawyer's farm",
+  "mobile_guide_toast": false,
+  "integrations_ui_url": "",
+  "integrations_rest_url": "",
+  "enable_presence_by_hs_url": {
+    "https://matrix.org": false,
+    "https://chat.shaoyie.com": true
+  },
+  "integrations_widgets_urls": [
+    "https://scalar.vector.im/api",
+    "https://scalar.vector.im/_matrix/integrations/v1",
+    "https://scalar.vector.im/widgets",
+    "https://scalar.vector.im/api/widgets",
+    "https://scalar-staging.vector.im/api",
+    "https://scalar-staging.vector.im/_matrix/integrations/v1",
+    "https://scalar-staging.vector.im/widgets",
+    "https://scalar-staging.vector.im/api/widgets",
+    "https://scalar-develop.vector.im/api",
+    "https://scalar-develop.vector.im/_matrix/integrations/v1",
+    "https://scalar-develop.vector.im/widgets",
+    "https://scalar-develop.vector.im/api/widgets"
+  ]
+}

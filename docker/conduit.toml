@@ -1,0 +1,15 @@
+[global]
+server_name = "chat.shaoyie.com"
+database_path = "/var/lib/matrix-conduit/conduit.db"
+database_backend = "rocksdb"
+allow_registration = true
+allow_federation = true
+address = "0.0.0.0"
+port = 6167
+max_request_size = 31457280
+
+
+[search]
+enabled = true
+max_results = 1000
+timeout_seconds = 30
