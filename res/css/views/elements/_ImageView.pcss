@@ -145,6 +145,23 @@ $button-gap: 24px;
     }
 }
 
+@media (max-width: 767px) {
+    .mx_ImageView_title {
+        display: none;
+    }
+
+    .mx_ImageView_toolbar {
+        gap: calc($button-gap / 2);
+    }
+
+    .mx_ImageView_button_zoomIn,
+    .mx_ImageView_button_zoomOut,
+    .mx_ImageView_button_rotateCW,
+    .mx_ImageView_button_rotateCCW {
+        display: none;
+    }
+}
+
 @media (prefers-reduced-motion) {
     .mx_ImageView_image_animating {
         transition: none !important;
